@@ -1,0 +1,484 @@
+<html lang="en" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">MPC Beat Store</title>
+    <style vid="5">
+        :root {
+            
+            --bg-body: #101418; 
+            --bg-card: #182029; 
+            --bg-card-hover: #1f2935;
+            --bg-input: #12161c;
+            
+            --border-color: #2b3544; 
+            --border-highlight: #3e4a5b;
+
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8; 
+            --text-mono: #cbd5e1;
+
+            --accent-glow: rgba(56, 189, 248, 0.1); 
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', 'Roboto Mono', monospace;
+
+            --radius-outer: 16px;
+            --radius-inner: 8px;
+            --space-unit: 24px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            
+            background-image: 
+                linear-gradient(var(--border-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: center;
+        }
+
+        
+        body::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(16,20,24,0.8) 0%, rgba(16,20,24,1) 90%);
+            z-index: -1;
+        }
+
+        
+        .mpc-interface {
+            width: 100%;
+            max-width: 1000px;
+            height: 90vh;
+            max-height: 800px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-outer);
+            display: grid;
+            grid-template-columns: 320px 1fr; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+
+        
+        .info-panel {
+            padding: var(--space-unit);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            position: relative;
+        }
+
+        .screen-display {
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-inner);
+            height: 240px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        
+        .visualizer-ring {
+            width: 140px;
+            height: 140px;
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .visualizer-ring::before {
+            content: '';
+            position: absolute;
+            width: 180px;
+            height: 60px;
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            transform: rotate(-15deg);
+            opacity: 0.5;
+        }
+
+        .track-title {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .track-desc {
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--text-secondary);
+        }
+
+        
+        .spec-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0; 
+        }
+
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-color);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            letter-spacing: 0.05em;
+        }
+
+        .spec-item:first-child {
+            border-top: 1px solid var(--border-color);
+        }
+
+        .spec-label {
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+        }
+
+        .spec-label::before {
+            content: '';
+            width: 4px;
+            height: 4px;
+            background-color: var(--text-secondary);
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+
+        .spec-value {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        
+        .control-surface {
+            padding: var(--space-unit);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-unit);
+            background: linear-gradient(180deg, var(--bg-card) 0%, #131920 100%);
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .pad-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 12px;
+            height: 100%;
+        }
+
+        
+        .mpc-pad {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .mpc-pad:hover {
+            background-color: var(--bg-card-hover);
+            border-color: var(--text-secondary);
+            transform: translateY(-1px);
+        }
+
+        .mpc-pad:active {
+            transform: translateY(1px);
+            background-color: #232d3a;
+        }
+
+        .mpc-pad.active {
+            border-color: var(--text-primary);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        
+        .pad-number {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-secondary);
+            opacity: 0.5;
+        }
+
+        .pad-label {
+            font-family: var(--font-main);
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .pad-meta {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-secondary);
+            text-align: right;
+            margin-top: 4px;
+        }
+
+        
+        .transport-controls {
+            display: flex;
+            gap: 16px;
+            margin-top: auto;
+            border-top: 1px solid var(--border-color);
+            padding-top: 24px;
+        }
+
+        .btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+            font-size: 11px;
+            text-transform: uppercase;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            border-color: var(--text-primary);
+            color: var(--text-primary);
+        }
+
+        .btn-primary {
+            background-color: var(--text-primary);
+            color: var(--bg-body);
+            border-color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        .btn-primary:hover {
+            background-color: #e2e8f0;
+        }
+
+        
+        @media (max-width: 900px) {
+            .mpc-interface {
+                grid-template-columns: 1fr;
+                height: auto;
+                max-height: none;
+                overflow-y: auto;
+            }
+            
+            .info-panel {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .pad-grid {
+                height: 400px; 
+            }
+        }
+    </style>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet" vid="6">
+</head>
+<body vid="7">
+
+    <div class="mpc-interface" vid="8">
+        
+        
+        <aside class="info-panel" vid="9">
+            <div class="screen-display" vid="10">
+                <div class="visualizer-ring" vid="11">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-secondary);" vid="12">
+                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" vid="13"></path>
+                    </svg>
+                </div>
+                <div style="position: absolute; bottom: 16px; font-family: var(--font-mono); font-size: 10px; color: var(--text-secondary); letter-spacing: 2px;" vid="14">SYS.READY</div>
+            </div>
+
+            <div class="text-content" vid="15">
+                <h1 class="track-title" vid="16">Type Beat Vol. 4</h1>
+                <p class="track-desc" vid="17">
+                    Dark, industrial hip-hop instrumental pack designed for aggressive lyricism. 
+                    Built with analog synthesis and heavy percussion layers.
+                    Optimized for seamless looping and arranging.
+                </p>
+            </div>
+
+            <div class="spec-list" vid="18">
+                <div class="spec-item" vid="19">
+                    <span class="spec-label" vid="20">BPM</span>
+                    <span class="spec-value" vid="21">142</span>
+                </div>
+                <div class="spec-item" vid="22">
+                    <span class="spec-label" vid="23">KEY</span>
+                    <span class="spec-value" vid="24">C# MIN</span>
+                </div>
+                <div class="spec-item" vid="25">
+                    <span class="spec-label" vid="26">DURATION</span>
+                    <span class="spec-value" vid="27">03:42</span>
+                </div>
+                <div class="spec-item" vid="28">
+                    <span class="spec-label" vid="29">LICENSE</span>
+                    <span class="spec-value" vid="30">UNLIMITED</span>
+                </div>
+            </div>
+        </aside>
+
+        
+        <main class="control-surface" vid="31">
+            <div class="toolbar" vid="32">
+                <span vid="33">NAVIGATION MATRIX</span>
+                <span vid="34">PAGE 1/4</span>
+            </div>
+
+            <div class="pad-grid" vid="35">
+                
+                <div class="mpc-pad active" vid="36">
+                    <span class="pad-number" vid="37">01</span>
+                    <span class="pad-label" vid="38">Home</span>
+                    <span class="pad-meta" vid="39">MAIN</span>
+                </div>
+                <div class="mpc-pad" vid="40">
+                    <span class="pad-number" vid="41">02</span>
+                    <span class="pad-label" vid="42">Beats</span>
+                    <span class="pad-meta" vid="43">STORE</span>
+                </div>
+                <div class="mpc-pad" vid="44">
+                    <span class="pad-number" vid="45">03</span>
+                    <span class="pad-label" vid="46">Kits</span>
+                    <span class="pad-meta" vid="47">SOUNDS</span>
+                </div>
+                <div class="mpc-pad" vid="48">
+                    <span class="pad-number" vid="49">04</span>
+                    <span class="pad-label" vid="50">Services</span>
+                    <span class="pad-meta" vid="51">MIXING</span>
+                </div>
+
+                
+                <div class="mpc-pad" vid="52">
+                    <span class="pad-number" vid="53">05</span>
+                    <span class="pad-label" vid="54">Cutlass</span>
+                    <span class="pad-meta" vid="55">TRAP</span>
+                </div>
+                <div class="mpc-pad" vid="56">
+                    <span class="pad-number" vid="57">06</span>
+                    <span class="pad-label" vid="58">Vessel</span>
+                    <span class="pad-meta" vid="59">DRILL</span>
+                </div>
+                <div class="mpc-pad" vid="60">
+                    <span class="pad-number" vid="61">07</span>
+                    <span class="pad-label" vid="62">Payload</span>
+                    <span class="pad-meta" vid="63">PHONK</span>
+                </div>
+                <div class="mpc-pad" vid="64">
+                    <span class="pad-number" vid="65">08</span>
+                    <span class="pad-label" vid="66">Orbit</span>
+                    <span class="pad-meta" vid="67">LOFI</span>
+                </div>
+
+                
+                <div class="mpc-pad" vid="68">
+                    <span class="pad-number" vid="69">09</span>
+                    <span class="pad-label" vid="70">Dark</span>
+                    <span class="pad-meta" vid="71">MOOD</span>
+                </div>
+                <div class="mpc-pad" vid="72">
+                    <span class="pad-number" vid="73">10</span>
+                    <span class="pad-label" vid="74">Hype</span>
+                    <span class="pad-meta" vid="75">MOOD</span>
+                </div>
+                <div class="mpc-pad" vid="76">
+                    <span class="pad-number" vid="77">11</span>
+                    <span class="pad-label" vid="78">Sad</span>
+                    <span class="pad-meta" vid="79">MOOD</span>
+                </div>
+                <div class="mpc-pad" vid="80">
+                    <span class="pad-number" vid="81">12</span>
+                    <span class="pad-label" vid="82">Chill</span>
+                    <span class="pad-meta" vid="83">MOOD</span>
+                </div>
+
+                
+                <div class="mpc-pad" vid="84">
+                    <span class="pad-number" vid="85">13</span>
+                    <span class="pad-label" vid="86">About</span>
+                    <span class="pad-meta" vid="87">INFO</span>
+                </div>
+                <div class="mpc-pad" vid="88">
+                    <span class="pad-number" vid="89">14</span>
+                    <span class="pad-label" vid="90">FAQ</span>
+                    <span class="pad-meta" vid="91">HELP</span>
+                </div>
+                <div class="mpc-pad" vid="92">
+                    <span class="pad-number" vid="93">15</span>
+                    <span class="pad-label" vid="94">Contact</span>
+                    <span class="pad-meta" vid="95">MAIL</span>
+                </div>
+                <div class="mpc-pad" vid="96">
+                    <span class="pad-number" vid="97">16</span>
+                    <span class="pad-label" vid="98">Cart</span>
+                    <span class="pad-meta" vid="99">[0]</span>
+                </div>
+            </div>
+
+            <div class="transport-controls" vid="100">
+                <button class="btn btn-primary" vid="101">
+                    <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24" vid="102"><path d="M8 5v14l11-7z" vid="103"></path></svg>
+                    Play Preview
+                </button>
+                <button class="btn" vid="104">
+                    <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24" vid="105"><path d="M6 6h12v12H6z" vid="106"></path></svg>
+                    Stop
+                </button>
+                <div style="flex-grow: 1" vid="107"></div>
+                <div style="display: flex; gap: 24px; align-items: center; font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary);" vid="108">
+                    <span vid="109">VOL: 80%</span>
+                    <span vid="110">Q-LINK: ON</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body></html>

@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "routes": [
+    { "src": "/", "dest": "/index.html" }
+  ],
+  "builds": [
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "design-c0113406-fb74-46af-8d43-8669493a1db7 2.html", "use": "@vercel/static" },
+    { "src": "*.html", "use": "@vercel/static" },
+    { "src": "*.wav", "use": "@vercel/static" },
+    { "src": "*.mp3", "use": "@vercel/static" }
+  ]
+}
+

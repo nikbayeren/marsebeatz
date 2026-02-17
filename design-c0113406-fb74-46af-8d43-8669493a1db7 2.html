@@ -1,0 +1,1968 @@
+<html lang="en" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" vid="3">
+    <title vid="4">marse beatz — MPC Beat Store</title>
+    <style vid="5">
+        :root {
+            
+            --bg-body: #13171D; 
+            --bg-card: #1A222B; 
+            --bg-card-hover: #212A35;
+            --border-subtle: #2C3642; 
+            --text-primary: #FFFFFF;
+            --text-secondary: #8B9BB4; 
+            --accent-mono: #E6EDF3;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: "SF Mono", "Roboto Mono", "Courier New", monospace;
+            
+            --radius-card: 12px;
+            --radius-sm: 4px;
+            
+            
+            --space-xs: 8px;
+            --space-sm: 16px;
+            --space-md: 24px;
+            --space-lg: 32px;
+            --space-xl: 48px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            overflow-x: hidden;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            margin: 0;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image:
+                linear-gradient(var(--border-subtle) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: center;
+        }
+
+        .page-top-title {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+            padding: 16px 20px;
+            font-family: var(--font-mono);
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            color: var(--accent-mono);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .page-top-title .page-top-name { display: block; }
+        .page-top-title .page-top-email {
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            color: var(--text-secondary);
+            text-decoration: none;
+            pointer-events: auto;
+        }
+        .page-top-title .page-top-email:hover {
+            color: var(--accent-mono);
+        }
+
+        .mpc-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding: 20px;
+        }
+
+        @media (max-width: 480px) {
+            .mpc-wrap {
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .mpc-wrap {
+                padding: 0;
+                align-items: stretch;
+                min-height: 100vh;
+                min-height: 100dvh;
+            }
+            .mpc-interface {
+                width: 100% !important;
+                max-width: 100%;
+                height: 100vh !important;
+                height: 100dvh !important;
+                min-height: 0 !important;
+                grid-template-columns: 1fr !important;
+                grid-template-rows: minmax(0, 1fr) auto !important;
+                overflow: hidden;
+            }
+            .info-panel {
+                padding: 8px 10px;
+                min-height: 0;
+                max-width: 100%;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+            }
+            .info-panel .track-info {
+                min-height: 0;
+                flex: 1 1 auto;
+                overflow: hidden;
+            }
+            .nav-panel {
+                padding: 8px 10px;
+                min-height: 0;
+                max-width: 100%;
+                flex: 0 0 auto;
+                display: flex;
+                flex-direction: column;
+            }
+            .nav-panel .pad-grid {
+                flex: 1;
+                min-height: 240px;
+            }
+            .promo-email {
+                flex: 0 0 36px;
+                height: 36px;
+                min-height: 36px;
+                max-height: 36px;
+                padding: 0 8px;
+                margin-bottom: 6px;
+            }
+            .promo-email a {
+                font-size: 13px;
+            }
+            .display-screen {
+                height: 180px !important;
+                min-height: 180px !important;
+                max-height: 180px !important;
+                margin-bottom: 4px;
+            }
+            .track-info {
+                min-height: 52px !important;
+                overflow-y: auto;
+            }
+            .display-screen .screen-list {
+                top: 6px;
+                left: 6px;
+                right: 6px;
+                bottom: 28px;
+            }
+            .screen-label {
+                font-size: 10px;
+            }
+            .track-info {
+                margin-top: 2px;
+                flex-shrink: 0;
+            }
+            .track-info h1 {
+                font-size: 15px;
+                margin-bottom: 2px;
+            }
+            .track-subtitle,
+            .track-desc {
+                font-size: 11px;
+                line-height: 1.35;
+                margin-bottom: 4px;
+                display: -webkit-box;
+                -webkit-line-clamp: 6;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+            .track-desc {
+                margin-bottom: 4px;
+            }
+            .data-list {
+                margin-top: 0;
+                flex-shrink: 0;
+            }
+            .data-row {
+                font-size: 11px;
+                padding: 3px 0;
+            }
+            .data-label {
+                font-size: 10px;
+            }
+            .data-value {
+                font-size: 12px;
+            }
+            .info-panel.view-contact .data-row:first-child .data-value {
+                font-size: 14px;
+            }
+            .panel-header {
+                margin-bottom: 6px;
+            }
+            .panel-title {
+                font-size: 11px;
+            }
+            .action-btn {
+                font-size: 10px;
+                padding: 5px 8px;
+            }
+            .pad-grid {
+                gap: 4px;
+                grid-template-rows: repeat(4, minmax(48px, 1fr));
+                min-height: 220px;
+            }
+            .pad {
+                min-height: 48px;
+                touch-action: manipulation;
+            }
+            .pad-number {
+                font-size: 10px;
+                top: 3px;
+                left: 3px;
+            }
+            .pad-label {
+                font-size: 12px;
+                letter-spacing: 0.2px;
+            }
+            .contact-social a {
+                width: 48px;
+                height: 48px;
+            }
+            .contact-social svg {
+                width: 24px;
+                height: 24px;
+            }
+            .kit-actions {
+                margin-top: 8px;
+            }
+            .download-btn {
+                padding: 8px 12px !important;
+                font-size: 11px !important;
+                width: auto;
+                min-width: 120px;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .display-screen { height: 60px; }
+            .track-info h1 { font-size: 15px; }
+            .track-desc, .track-subtitle { font-size: 11px; -webkit-line-clamp: 6; }
+            .pad-label { font-size: 11px; }
+            .nav-panel { min-height: 300px; }
+            .pad-grid { grid-template-rows: repeat(4, minmax(58px, 1fr)); gap: 5px; }
+            .pad { min-height: 58px; }
+        }
+
+        body.mobile-view {
+            padding-top: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100dvh;
+            max-height: 100dvh;
+            height: 100dvh;
+            overflow: hidden;
+        }
+        body.mobile-view .page-top-title {
+            position: static;
+            flex-shrink: 0;
+            font-size: 20px;
+            padding: 10px 12px;
+            gap: 2px;
+        }
+        body.mobile-view .page-top-title .page-top-email {
+            font-size: 12px;
+        }
+        body.mobile-view .info-panel > .promo-email {
+            display: none;
+        }
+        body.mobile-view .mpc-wrap {
+            padding: 0;
+            align-items: stretch;
+            flex: 1 1 0;
+            min-height: 0;
+            height: auto;
+        }
+        body.mobile-view .mpc-interface {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 100% !important;
+            min-height: 0 !important;
+            grid-template-columns: 1fr !important;
+            grid-template-rows: minmax(0, 1fr) auto !important;
+            overflow: hidden;
+            transform: none !important;
+        }
+        body.mobile-view .info-panel {
+            max-width: 100%;
+            padding: 6px 8px 8px;
+            min-height: 0;
+            flex: 1 1 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        body.mobile-view .info-panel > .promo-email {
+            flex: 0 0 36px;
+            height: 36px;
+            min-height: 36px;
+            max-height: 36px;
+            padding: 0 8px;
+            margin-bottom: 6px;
+        }
+        body.mobile-view .info-panel .display-screen {
+            flex: 0 0 auto;
+            height: 140px;
+            min-height: 100px;
+            max-height: 160px;
+        }
+        body.mobile-view .info-panel .track-info {
+            flex: 1 1 auto;
+            min-height: 0;
+        }
+        body.mobile-view .info-panel .data-list {
+            flex-shrink: 0;
+            min-height: 40px;
+        }
+        body.mobile-view .info-panel .kit-actions {
+            flex-shrink: 0;
+            min-height: 36px;
+        }
+        body.mobile-view .info-panel > div {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+        body.mobile-view .info-panel .track-desc,
+        body.mobile-view .info-panel .track-subtitle {
+            -webkit-line-clamp: 4;
+        }
+        body.mobile-view .nav-panel {
+            max-width: 100%;
+            flex: 0 0 auto;
+            min-height: 0;
+            padding: 6px 8px;
+            overflow: hidden;
+        }
+        body.mobile-view .promo-email a {
+            font-size: 13px;
+        }
+        body.mobile-view .display-screen {
+            height: 140px !important;
+            min-height: 100px !important;
+            max-height: 160px !important;
+            margin-bottom: 4px;
+        }
+        body.mobile-view .track-info {
+            min-height: 0 !important;
+            overflow: hidden;
+        }
+        body.mobile-view .display-screen .screen-list {
+            top: 6px;
+            left: 6px;
+            right: 6px;
+            bottom: 28px;
+        }
+        body.mobile-view .display-screen .screen-card .card-title {
+            font-size: 11px;
+        }
+        body.mobile-view .display-screen .screen-card .card-desc,
+        body.mobile-view .display-screen .screen-card .card-price {
+            font-size: 10px;
+        }
+        body.mobile-view .track-info h1 {
+            font-size: 14px !important;
+            margin-bottom: 2px;
+        }
+        body.mobile-view .track-desc,
+        body.mobile-view .track-subtitle {
+            font-size: 11px !important;
+            margin-bottom: 2px;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        body.mobile-view .data-row {
+            padding: 2px 0;
+            font-size: 11px;
+        }
+        body.mobile-view .info-panel .data-list {
+            padding-top: 4px;
+        }
+        body.mobile-view .pad-grid {
+            grid-template-rows: repeat(4, minmax(44px, 1fr)) !important;
+            gap: 4px;
+            min-height: 160px;
+        }
+        body.mobile-view .pad {
+            min-height: 48px !important;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            transform: none !important;
+            transition: background-color 0.15s ease-out, border-color 0.15s ease-out;
+        }
+        body.mobile-view .pad:active,
+        body.mobile-view .pad.active {
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        body.mobile-view .pad .pad-label {
+            font-size: 11px !important;
+            color: var(--accent-mono) !important;
+        }
+        body.mobile-view .pad.active .pad-label {
+            color: var(--text-primary) !important;
+        }
+        body.mobile-view .pad[data-action="spotify"] .pad-label { color: #4ade80 !important; }
+        body.mobile-view .pad[data-action="spotify"].active .pad-label { color: #86efac !important; }
+        body.mobile-view .pad[data-action="applemusic"] .pad-label { color: #FA243C !important; }
+        body.mobile-view .pad[data-action="applemusic"].active .pad-label { color: #ff3b5c !important; }
+        body.mobile-view .pad[data-action="youtube"] .pad-label { color: #FF0000 !important; }
+        body.mobile-view .pad[data-action="youtube"].active .pad-label { color: #ff1a1a !important; }
+        body.mobile-view .pad[data-action="soundcloud"] .pad-label { color: #FF5500 !important; }
+        body.mobile-view .pad[data-action="soundcloud"].active .pad-label { color: #ff7733 !important; }
+        body.mobile-view .kit-actions {
+            margin-top: 8px;
+        }
+        body.mobile-view .download-btn {
+            padding: 8px 12px !important;
+            font-size: 11px !important;
+            width: auto;
+            min-width: 120px;
+            max-width: 100%;
+        }
+
+        .mpc-interface {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr;
+            width: 1000px;
+            height: 600px;
+            flex-shrink: 0;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-card);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            overflow: hidden;
+            transform-origin: center center;
+        }
+
+        .info-panel, .nav-panel {
+            min-height: 0;
+        }
+
+        .info-panel {
+            padding: var(--space-lg);
+            border-right: 1px solid var(--border-subtle);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-width: 0;
+            overflow: hidden;
+        }
+        .info-panel > div {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .info-panel .display-screen {
+            flex: 0 0 auto;
+            height: 200px;
+            min-height: 200px;
+            max-height: 200px;
+        }
+        .display-screen {
+            background: #0D1115;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            height: 200px;
+            min-height: 200px;
+            max-height: 200px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            margin-bottom: var(--space-sm);
+            overflow: hidden;
+        }
+        .track-info {
+            flex: 0 1 auto;
+            min-height: 0;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .display-screen .screen-main {
+            flex: 1;
+            width: 100%;
+            min-height: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .display-screen .screen-main .waveform {
+            position: relative;
+            z-index: 0;
+        }
+        .welcome-message {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display, "Segoe UI", system-ui, sans-serif);
+            font-size: clamp(22px, 5vw, 36px);
+            font-weight: 300;
+            color: var(--text-primary);
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            z-index: 2;
+        }
+        .welcome-message.visible {
+            display: flex;
+        }
+        body.view-home .display-screen .waveform {
+            display: none !important;
+        }
+        .display-screen .contact-social {
+            flex-shrink: 0;
+            padding: 6px 8px;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            border-top: none;
+        }
+        .info-panel.view-contact .display-screen .contact-social {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            flex: 1;
+            padding: 0;
+        }
+        .display-screen .contact-social a {
+            width: 48px;
+            height: 48px;
+        }
+        .display-screen .contact-social svg {
+            width: 28px;
+            height: 28px;
+        }
+        .info-panel.view-contact .display-screen .contact-social a {
+            width: 56px;
+            height: 56px;
+        }
+        .info-panel.view-contact .display-screen .contact-social svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .display-screen .screen-list {
+            position: absolute;
+            left: var(--space-xs);
+            right: var(--space-xs);
+            top: var(--space-xs);
+            bottom: 32px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr;
+            gap: var(--space-xs);
+            overflow: hidden;
+            align-items: stretch;
+        }
+        body.view-kits .display-screen .screen-list {
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr;
+            align-items: center;
+            justify-items: center;
+        }
+        body.view-kits .display-screen .screen-card {
+            height: 100% !important;
+            width: auto !important;
+            max-width: 100%;
+            aspect-ratio: 1;
+            min-height: 0;
+            display: grid;
+            grid-template-rows: 1fr auto;
+        }
+        body.view-kits .display-screen .screen-card .card-image,
+        body.view-kits .display-screen .screen-card .card-image-placeholder {
+            min-height: 0;
+            height: 100%;
+            object-fit: cover;
+        }
+        body.view-kits .display-screen .screen-card .card-body {
+            padding: 4px 6px;
+        }
+        body.view-kits .display-screen .screen-card .card-title {
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        body.view-kits .display-screen .screen-card .card-desc {
+            font-size: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        body.view-kits .display-screen .screen-card .card-price {
+            font-size: 11px;
+        }
+        body.mobile-view.view-kits .display-screen .screen-card:active {
+            transform: none !important;
+        }
+        .display-screen .screen-card {
+            background: #161C23;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            min-height: 0;
+        }
+        .display-screen .screen-card:hover,
+        .display-screen .screen-card.active {
+            border-color: var(--text-secondary);
+            background: var(--bg-card-hover);
+        }
+        .display-screen .screen-card .card-image {
+            width: 100%;
+            flex: 1;
+            min-height: 50px;
+            background: #0D1115;
+            object-fit: cover;
+        }
+        .display-screen .screen-card .card-image-placeholder {
+            width: 100%;
+            flex: 1;
+            min-height: 50px;
+            background: linear-gradient(135deg, #1a222b 0%, #2C3642 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
+        }
+        .display-screen .screen-card .card-body {
+            padding: 6px 8px;
+            flex-shrink: 0;
+            min-width: 0;
+        }
+        .display-screen .screen-card .card-title {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 2px;
+        }
+        .display-screen .screen-card .card-desc {
+            font-size: 9px;
+            color: var(--text-secondary);
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 2px;
+        }
+        .display-screen .screen-card .card-price {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        .screen-pagination {
+            position: absolute;
+            bottom: 6px;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            padding: 4px 0;
+        }
+        .screen-pagination button {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            padding: 4px 10px;
+            background: #161C23;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .screen-pagination button:hover:not(:disabled) {
+            border-color: var(--text-secondary);
+            color: var(--text-primary);
+        }
+        .screen-pagination button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .screen-pagination .page-info {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+
+        .kit-actions {
+            margin-top: var(--space-md);
+        }
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: var(--space-sm) var(--space-md);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            background: var(--border-subtle);
+            border: 1px solid var(--text-secondary);
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .download-btn:hover {
+            background: var(--text-secondary);
+            color: var(--bg-body);
+        }
+
+        
+        .waveform {
+            width: 80%;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2px;
+        }
+        .bar {
+            background: var(--text-secondary);
+            width: 3px;
+            border-radius: 1px;
+            animation: pulse 2s infinite ease-in-out;
+        }
+        .bar:nth-child(odd) { height: 40%; animation-delay: 0.1s; }
+        .bar:nth-child(even) { height: 70%; animation-delay: 0.3s; }
+        .bar:nth-child(3n) { height: 20%; animation-delay: 0.5s; }
+        .bar:nth-child(4n) { height: 90%; animation-delay: 0.2s; }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: scaleY(1); }
+            50% { opacity: 1; transform: scaleY(1.2); }
+        }
+
+        .screen-label {
+            position: absolute;
+            top: var(--space-sm);
+            left: var(--space-sm);
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+        }
+
+        .track-info h1 {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: var(--space-sm);
+            color: var(--text-primary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .track-subtitle {
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--text-secondary);
+            margin-top: 0;
+            margin-bottom: var(--space-sm);
+            max-width: 90%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .track-desc {
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-sm);
+            max-width: 90%;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+
+        
+        .data-list {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            min-width: 0;
+            flex-shrink: 0;
+        }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+            border-bottom: 1px solid var(--border-subtle);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            min-width: 0;
+        }
+        .data-row:last-child {
+            border-bottom: none;
+        }
+
+        .data-label {
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .data-label::before {
+            content: "•";
+            color: var(--text-secondary);
+            margin-right: 8px;
+            font-size: 14px;
+        }
+
+        .data-value {
+            color: var(--text-primary);
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-left: 8px;
+        }
+        .info-panel.view-contact .data-row:first-child .data-value {
+            color: var(--accent-mono);
+            font-weight: 600;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+        }
+        body.view-genre-loop .data-list .data-row:nth-child(2),
+        body.view-genre-loop .data-list .data-row:nth-child(3),
+        body.view-genre-loop .data-list .data-row:nth-child(4) {
+            display: none;
+        }
+        body.view-home .data-list .data-row:nth-child(2),
+        body.view-home .data-list .data-row:nth-child(3),
+        body.view-home .data-list .data-row:nth-child(4) {
+            display: none;
+        }
+        .info-panel.view-contact .data-list .data-row:nth-child(2),
+        .info-panel.view-contact .data-list .data-row:nth-child(3),
+        .info-panel.view-contact .data-list .data-row:nth-child(4) {
+            display: none;
+        }
+
+        
+        .nav-panel {
+            padding: 12px;
+            display: grid;
+            grid-template-rows: auto 1fr;
+            grid-template-columns: 1fr;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--border-subtle);
+            min-height: 0;
+        }
+
+        .panel-title {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+        }
+
+        
+        .action-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border: 1px dashed var(--border-subtle);
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            color: var(--text-primary);
+            border-color: var(--text-secondary);
+        }
+
+        
+        .pad-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, minmax(0, 1fr));
+            gap: 6px;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .pad {
+            background-color: #161C23;
+            border: 1px solid var(--border-subtle);
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.15s ease-out;
+            position: relative;
+            user-select: none;
+            min-height: 0;
+        }
+
+        .pad:hover {
+            background-color: var(--bg-card-hover);
+            border-color: var(--text-secondary);
+        }
+
+        .pad:active {
+            background-color: #0F1318;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .pad-number {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: #3C4858;
+        }
+
+        .pad-label {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--accent-mono);
+        }
+        .pad[data-action="contact"] .pad-label {
+            font-size: 10px;
+            line-height: 1.3;
+            text-align: center;
+            display: block;
+            white-space: normal;
+        }
+
+        .pad.active {
+            border-color: var(--text-primary);
+            background-color: #212A35;
+        }
+
+        .pad.active .pad-label {
+            color: var(--text-primary);
+        }
+
+        .pad[data-action="spotify"] .pad-label { color: #4ade80; }
+        .pad[data-action="spotify"]:hover .pad-label,
+        .pad[data-action="spotify"].active .pad-label { color: #86efac; }
+        .pad[data-action="applemusic"] .pad-label { color: #FA243C; }
+        .pad[data-action="applemusic"]:hover .pad-label,
+        .pad[data-action="applemusic"].active .pad-label { color: #ff3b5c; }
+        .pad[data-action="youtube"] .pad-label { color: #FF0000; }
+        .pad[data-action="youtube"]:hover .pad-label,
+        .pad[data-action="youtube"].active .pad-label { color: #ff1a1a; }
+        .pad[data-action="soundcloud"] .pad-label { color: #FF5500; }
+        .pad[data-action="soundcloud"]:hover .pad-label,
+        .pad[data-action="soundcloud"].active .pad-label { color: #ff7733; }
+        
+        .pad.accent {
+            border-top: 2px solid var(--text-secondary);
+        }
+
+        .pad.pad-drum.hit,
+        .pad.pad-drum:active {
+            background-color: #2a3542;
+            border-color: var(--text-primary);
+            transition: none;
+        }
+
+        
+        .screw {
+            width: 8px;
+            height: 8px;
+            border: 1px solid #2C3642;
+            border-radius: 50%;
+            position: absolute;
+            display: grid;
+            place-items: center;
+        }
+        .screw::after {
+            content: "+";
+            font-family: monospace;
+            font-size: 10px;
+            color: #2C3642;
+            line-height: 0;
+        }
+        .screw.tl { top: 16px; left: 16px; opacity: 0.2; }
+        .screw.tr { top: 16px; right: 16px; opacity: 0.2; }
+        .screw.bl { bottom: 16px; left: 16px; opacity: 0.2; }
+        .screw.br { bottom: 16px; right: 16px; opacity: 0.2; }
+
+        .promo-email {
+            flex: 0 0 48px;
+            height: 48px;
+            min-height: 48px;
+            max-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 var(--space-md);
+            background: var(--bg-card-hover);
+            border-bottom: 1px solid var(--border-subtle);
+            margin-bottom: var(--space-sm);
+            box-sizing: border-box;
+        }
+        .promo-email a {
+            font-family: var(--font-mono);
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+            letter-spacing: 0.5px;
+        }
+        .promo-email a:hover {
+            color: var(--accent-mono);
+            text-decoration: underline;
+        }
+        .contact-social {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-md);
+            margin-top: var(--space-md);
+            padding-top: var(--space-md);
+            border-top: 1px solid var(--border-subtle);
+        }
+        .contact-social a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+            transition: background 0.2s, transform 0.15s;
+        }
+        .contact-social a:hover {
+            background: var(--border-subtle);
+            transform: scale(1.08);
+            color: var(--accent-mono);
+        }
+        .contact-social svg {
+            width: 22px;
+            height: 22px;
+        }
+
+    </style>
+</head>
+<body vid="6">
+    <header class="page-top-title">
+        <span class="page-top-name">marse beatz</span>
+        <a href="mailto:marsebeatz34@gmail.com" class="page-top-email">marsebeatz34@gmail.com</a>
+    </header>
+    <div id="file-protocol-hint" style="display:none;position:fixed;top:0;left:0;right:0;background:#c53030;color:#fff;padding:10px 20px;text-align:center;font-size:14px;z-index:9999;">To load drum sounds (Kick, Hat, Snare, Open Hat), open the page from a local server: in the <strong>beat2</strong> folder run <strong>npm run serve</strong> in the terminal, then open <strong>http://localhost:3000</strong> in your browser and open this HTML file.</div>
+    <div class="mpc-wrap">
+    <div class="mpc-interface" id="mpc-interface" vid="7">
+        
+        <div class="screw tl" vid="8"></div>
+        <div class="screw br" vid="9"></div>
+
+        
+        <div class="info-panel" vid="10">
+            <div class="promo-email">
+                <a href="mailto:marsebeatz34@gmail.com" id="promo-email-link">marsebeatz34@gmail.com</a>
+            </div>
+            <div vid="11">
+                <div class="display-screen" vid="12">
+                    <span class="screen-label" id="screen-label" vid="13">OS 4.2 // LOADED</span>
+                    <div class="screen-main" id="screen-main">
+                        <div class="welcome-message" id="welcome-message">Welcome</div>
+                        <div class="waveform" id="waveform" vid="14">
+                            <div class="bar" vid="15"></div><div class="bar" vid="16"></div><div class="bar" vid="17"></div><div class="bar" vid="18"></div>
+                            <div class="bar" vid="19"></div><div class="bar" vid="20"></div><div class="bar" vid="21"></div><div class="bar" vid="22"></div>
+                            <div class="bar" vid="23"></div><div class="bar" vid="24"></div><div class="bar" vid="25"></div><div class="bar" vid="26"></div>
+                            <div class="bar" vid="27"></div><div class="bar" vid="28"></div><div class="bar" vid="29"></div><div class="bar" vid="30"></div>
+                            <div class="bar" vid="31"></div><div class="bar" vid="32"></div><div class="bar" vid="33"></div><div class="bar" vid="34"></div>
+                        </div>
+                        <div class="screen-list kit-list" id="kit-list" style="display:none;"></div>
+                        <div class="screen-list beat-list" id="beat-list" style="display:none;"></div>
+                        <div class="screen-pagination" id="screen-pagination" style="display:none;">
+                            <button type="button" id="page-prev" aria-label="Previous">‹</button>
+                            <span class="page-info" id="page-info">1/1</span>
+                            <button type="button" id="page-next" aria-label="Next">›</button>
+                        </div>
+                    </div>
+                    <div class="contact-social" id="contact-social" style="display:none;">
+                        <a href="https://www.tiktok.com/@marsebeatz" target="_blank" rel="noopener" aria-label="TikTok" title="TikTok">
+                            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88 2.4V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
+                        </a>
+                        <a href="https://www.instagram.com/marsebeatz" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
+                            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.919-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.919-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.919.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.919-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="track-info" vid="35">
+                    <h1 id="track-title" vid="36">Night Ops Kit</h1>
+                    <p class="track-subtitle" id="track-subtitle" style="display:none;"></p>
+                    <p class="track-desc" id="track-desc" vid="37">
+                        A curated selection of tactical drum samples and dark melodic textures designed for low-visibility environments. Includes 16 distinct pads of high-fidelity audio.
+                    </p>
+                </div>
+            </div>
+
+            
+            <div class="data-list" vid="38">
+                <div class="data-row" vid="39">
+                    <span class="data-label" id="data-label-1" vid="40">TOTAL SIZE</span>
+                    <span class="data-value" id="data-value-1" vid="41">245 MB</span>
+                </div>
+                <div class="data-row" vid="42">
+                    <span class="data-label" id="data-label-2" vid="43">FORMAT</span>
+                    <span class="data-value" id="data-value-2" vid="44">WAV 24-BIT</span>
+                </div>
+                <div class="data-row" vid="45">
+                    <span class="data-label" id="data-label-3" vid="46">SAMPLES</span>
+                    <span class="data-value" id="data-value-3" vid="47">128 ONE-SHOTS</span>
+                </div>
+                <div class="data-row" vid="48">
+                    <span class="data-label" id="data-label-4" vid="49">PRICE</span>
+                    <span class="data-value" id="data-value-4" vid="50">$29.00</span>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="nav-panel" vid="51">
+            <div class="panel-header" vid="52">
+                <span class="panel-title" vid="53">CONTROL DECK</span>
+                <button class="action-btn" id="reset-view-btn" type="button" vid="54">
+                    <span vid="55">[]</span> RESET VIEW
+                </button>
+            </div>
+
+            <div class="pad-grid" vid="56">
+                
+                <div class="pad active accent" data-action="home" vid="57">
+                    <span class="pad-number" vid="58">01</span>
+                    <span class="pad-label" vid="59">HOME</span>
+                </div>
+                <div class="pad accent" data-action="kits" vid="60">
+                    <span class="pad-number" vid="61">02</span>
+                    <span class="pad-label" vid="62">KITS</span>
+                </div>
+                <div class="pad accent" data-action="contact" vid="63">
+                    <span class="pad-number" vid="64">03</span>
+                    <span class="pad-label" vid="65">CONTACT<br>SOCIALS</span>
+                </div>
+                <div class="pad accent" data-action="about" vid="66">
+                    <span class="pad-number" vid="67">04</span>
+                    <span class="pad-label" vid="68">ABOUT</span>
+                </div>
+
+                
+                <div class="pad" data-action="spotify" vid="69">
+                    <span class="pad-number" vid="70">05</span>
+                    <span class="pad-label" vid="71">Spotify</span>
+                </div>
+                <div class="pad" data-action="applemusic" vid="72">
+                    <span class="pad-number" vid="73">06</span>
+                    <span class="pad-label" vid="74">Apple Music</span>
+                </div>
+                <div class="pad" data-action="youtube" vid="75">
+                    <span class="pad-number" vid="76">07</span>
+                    <span class="pad-label" vid="77">YouTube</span>
+                </div>
+                <div class="pad" data-action="soundcloud" vid="78">
+                    <span class="pad-number" vid="79">08</span>
+                    <span class="pad-label" vid="80">Instagram</span>
+                </div>
+
+                
+                <div class="pad" data-action="lofi" vid="81">
+                    <span class="pad-number" vid="82">09</span>
+                    <span class="pad-label" vid="83">LO-FI</span>
+                </div>
+                <div class="pad" data-action="trap" vid="84">
+                    <span class="pad-number" vid="85">10</span>
+                    <span class="pad-label" vid="86">TRAP</span>
+                </div>
+                <div class="pad" data-action="drill" vid="87">
+                    <span class="pad-number" vid="88">11</span>
+                    <span class="pad-label" vid="89">DRILL</span>
+                </div>
+                <div class="pad" data-action="boombap" vid="90">
+                    <span class="pad-number" vid="91">12</span>
+                    <span class="pad-label" vid="92">BOOM BAP</span>
+                </div>
+
+                
+                <div class="pad pad-drum" data-action="kick" vid="93">
+                    <span class="pad-number" vid="94">13</span>
+                    <span class="pad-label" vid="95">KICK</span>
+                </div>
+                <div class="pad pad-drum" data-action="hat" vid="96">
+                    <span class="pad-number" vid="97">14</span>
+                    <span class="pad-label" vid="98">HAT</span>
+                </div>
+                <div class="pad pad-drum" data-action="snare" vid="99">
+                    <span class="pad-number" vid="100">15</span>
+                    <span class="pad-label" vid="101">SNARE</span>
+                </div>
+                <div class="pad pad-drum" data-action="openhat" vid="102">
+                    <span class="pad-number" vid="103">16</span>
+                    <span class="pad-label" vid="104">OPEN HAT</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script>
+(function () {
+    function setMobileClass() {
+        var w = window.innerWidth || document.documentElement.clientWidth;
+        document.body.classList.toggle('mobile-view', w <= 1024);
+    }
+    setMobileClass();
+    window.addEventListener('resize', setMobileClass);
+    window.addEventListener('orientationchange', function () { setTimeout(setMobileClass, 100); });
+})();
+    </script>
+    <script>
+(function () {
+    var mpc = document.getElementById('mpc-interface');
+    function fitMpc() {
+        if (!mpc) return;
+        var w = window.innerWidth;
+        if (w <= 1024) {
+            mpc.style.transform = 'none';
+            mpc.style.width = '100%';
+            return;
+        }
+        var h = window.innerHeight;
+        var pad = w <= 480 ? 24 : 40;
+        var scale = Math.min((w - pad) / 1000, (h - pad) / 600, 1.7);
+        scale = Math.max(scale, 0.28);
+        mpc.style.transform = 'scale(' + scale + ')';
+        mpc.style.width = '1000px';
+    }
+    fitMpc();
+    window.addEventListener('resize', fitMpc);
+})();
+    </script>
+    <script>
+(function () {
+    if (window.location.protocol === 'file:') {
+        var el = document.getElementById('file-protocol-hint');
+        if (el) el.style.display = 'block';
+    }
+    var screenLabel = document.getElementById('screen-label');
+    var trackTitle = document.getElementById('track-title');
+    var trackSubtitleEl = document.getElementById('track-subtitle');
+    var trackDesc = document.getElementById('track-desc');
+    var dataLabels = [document.getElementById('data-label-1'), document.getElementById('data-label-2'), document.getElementById('data-label-3'), document.getElementById('data-label-4')];
+    var dataValues = [document.getElementById('data-value-1'), document.getElementById('data-value-2'), document.getElementById('data-value-3'), document.getElementById('data-value-4')];
+    var kitListEl = document.getElementById('kit-list');
+    var beatListEl = document.getElementById('beat-list');
+    var waveformEl = document.getElementById('waveform');
+    var kitActionsEl = document.getElementById('kit-actions');
+    var contactSocialEl = document.getElementById('contact-social');
+    var downloadBtnEl = document.getElementById('kit-download-btn');
+    var screenPaginationEl = document.getElementById('screen-pagination');
+    var pagePrevBtn = document.getElementById('page-prev');
+    var pageNextBtn = document.getElementById('page-next');
+    var pageInfoEl = document.getElementById('page-info');
+    var screenMainEl = document.getElementById('screen-main');
+    var welcomeMessageEl = document.getElementById('welcome-message');
+
+    var currentKitPage = 0;
+    var currentBeatPage = 0;
+    var currentBeatCategory = '';
+    var PER_PAGE = 2;
+    var currentLoopGenre = null;
+    var loopAudio = null;
+    var genreLoopVolumes = {
+        lofi: 0.8,
+        trap: 0.8,
+        drill: 0.8,
+        boombap: 0.8
+    };
+    function getLoopAudio() {
+        if (!loopAudio) { loopAudio = new Audio(); loopAudio.loop = true; }
+        return loopAudio;
+    }
+    function stopGenreLoop() {
+        if (loopAudio) { loopAudio.pause(); loopAudio.currentTime = 0; loopAudio.removeAttribute('src'); }
+        currentLoopGenre = null;
+    }
+
+    var beatDemos = {
+        lofi: [
+            { name: 'Lo-Fi Demo 1', shortDesc: 'Chill beat • 90 BPM', price: 'Listen', image: 'https://picsum.photos/seed/lofidemo1/300/160' },
+            { name: 'Lo-Fi Demo 2', shortDesc: 'Vinyl feel • 85 BPM', price: 'Listen', image: 'https://picsum.photos/seed/lofidemo2/300/160' },
+            { name: 'Lo-Fi Demo 3', shortDesc: 'Jazz loop • 88 BPM', price: 'Listen', image: 'https://picsum.photos/seed/lofidemo3/300/160' },
+            { name: 'Lo-Fi Demo 4', shortDesc: 'Piano loop • 87 BPM', price: 'Listen', image: 'https://picsum.photos/seed/lofidemo4/300/160' }
+        ],
+        trap: [
+            { name: 'Trap Demo 1', shortDesc: '808 heavy • 145 BPM', price: 'Listen', image: 'https://picsum.photos/seed/trapdemo1/300/160' },
+            { name: 'Trap Demo 2', shortDesc: 'Dark trap • 150 BPM', price: 'Listen', image: 'https://picsum.photos/seed/trapdemo2/300/160' },
+            { name: 'Trap Demo 3', shortDesc: 'Melodic • 140 BPM', price: 'Listen', image: 'https://picsum.photos/seed/trapdemo3/300/160' },
+            { name: 'Trap Demo 4', shortDesc: 'Bass heavy • 148 BPM', price: 'Listen', image: 'https://picsum.photos/seed/trapdemo4/300/160' }
+        ],
+        drill: [
+            { name: 'Drill Demo 1', shortDesc: 'UK drill • 140 BPM', price: 'Listen', image: 'https://picsum.photos/seed/drilldemo1/300/160' },
+            { name: 'Drill Demo 2', shortDesc: 'Brooklyn style • 138 BPM', price: 'Listen', image: 'https://picsum.photos/seed/drilldemo2/300/160' },
+            { name: 'Drill Demo 3', shortDesc: 'Dark melody • 142 BPM', price: 'Listen', image: 'https://picsum.photos/seed/drilldemo3/300/160' },
+            { name: 'Drill Demo 4', shortDesc: 'Sliding 808 • 141 BPM', price: 'Listen', image: 'https://picsum.photos/seed/drilldemo4/300/160' }
+        ],
+        boombap: [
+            { name: 'Boom Bap Demo 1', shortDesc: 'Classic • 92 BPM', price: 'Listen', image: 'https://picsum.photos/seed/bbdemo1/300/160' },
+            { name: 'Boom Bap Demo 2', shortDesc: 'Soul sample • 88 BPM', price: 'Listen', image: 'https://picsum.photos/seed/bbdemo2/300/160' },
+            { name: 'Boom Bap Demo 3', shortDesc: 'Drum break • 90 BPM', price: 'Listen', image: 'https://picsum.photos/seed/bbdemo3/300/160' },
+            { name: 'Boom Bap Demo 4', shortDesc: 'Jazz chop • 91 BPM', price: 'Listen', image: 'https://picsum.photos/seed/bbdemo4/300/160' }
+        ]
+    };
+
+    /* Loop file per genre — kendi beat’inin URL’ini (mp3/wav) yaz; boş bırakırsan sadece davullarla çalınır */
+    var genreLoops = {
+        lofi:   { url: 'nothing%20i%20d%20rather%20be.mp3', title: 'Lo-Fi', label: 'OS 4.2 // LO-FI' },
+        trap:   { url: '122%20bpm%20farkl%C4%B1.flp2.wav', title: 'Trap', label: 'OS 4.2 // TRAP' },
+        drill:  { url: 'violin%20drill%20130%20bpm%202.wav', title: 'Drill', label: 'OS 4.2 // DRILL' },
+        boombap: { url: 'island%20in%20the%20sky.wav', title: 'Boom Bap', label: 'OS 4.2 // BOOM BAP' }
+    };
+    var genreLoopHeaders = {
+        lofi:   'Let\'s make LO-FI music together? marsebeatz34@gmail.com',
+        trap:   'Get in touch for trap beats.',
+        drill:  'Get in touch for drill beats.',
+        boombap: 'Get in touch for boom bap beats.'
+    };
+    var genreLoopFooter = 'Use the bottom pads (Kick, Hat, Snare, Open Hat) to play drums over this loop.';
+    var genreLoopContact = 'marsebeatz34@gmail.com';
+
+    /* Spotify, Apple Music, YouTube, Instagram links — senin gerçek profillerin */
+    var socialUrls = {
+        spotify: 'https://open.spotify.com/intl-tr/artist/6HGk7uFbaDJxZYMSoiXOQJ?si=4lk8klDnQTKyz3YofXlmzg',
+        applemusic: 'https://music.apple.com/de/album/age-8/1504154594?i=1504154596',
+        youtube: 'https://www.youtube.com/watch?v=uHyzW_VgFus',
+        soundcloud: 'https://www.instagram.com/marsebeatz/'
+    };
+
+    var kits = [
+        { id: 0, name: 'Night Ops Kit', image: 'https://picsum.photos/seed/nightops/300/160', shortDesc: 'Tactical drum samples & dark textures. 16 pads.', desc: 'A curated selection of tactical drum samples and dark melodic textures designed for low-visibility environments. Includes 16 distinct pads of high-fidelity audio.', size: '245 MB', format: 'WAV 24-BIT', samples: '128 ONE-SHOTS', price: '$29.00', downloadUrl: '#' },
+        { id: 1, name: 'Dark Trap Kit', image: 'https://picsum.photos/seed/darktrap/300/160', shortDesc: '808 & hi-hat trap kit. 128 one-shots.', desc: '808 and hi-hat focused trap sample kit. 128 one-shots, 140–170 BPM.', size: '312 MB', format: 'WAV 24-BIT', samples: '128', price: '$29.00', downloadUrl: '#' },
+        { id: 2, name: 'Lo-Fi Pack', image: 'https://picsum.photos/seed/lofipack/300/160', shortDesc: 'Chill vinyl drums & keys. 64 one-shots.', desc: 'Drums and keys for lo-fi production. Around 90 BPM.', size: '180 MB', format: 'WAV 24-BIT', samples: '64', price: '$24.00', downloadUrl: '#' },
+        { id: 3, name: 'Boom Bap Essentials', image: 'https://picsum.photos/seed/boombap/300/160', shortDesc: 'Classic breaks & soul. 80 one-shots.', desc: 'Classic boom bap drum and sample set. 85–95 BPM.', size: '198 MB', format: 'WAV 24-BIT', samples: '80', price: '$25.00', downloadUrl: '#' }
+    ];
+
+    var content = {
+        home: {
+            label: 'OS 4.2 // MARSE BEATZ',
+            title: 'marse beatz',
+            desc: 'Beats and kits. Welcome.',
+            data: [['CONTACT', 'marsebeatz34@gmail.com'], ['—', '—'], ['—', '—'], ['—', '—']]
+        },
+        beats: {
+            label: 'OS 4.2 // BEATS',
+            title: 'Beats',
+            desc: 'All beats for sale. License options: basic, premium, unlimited. Listen and buy.',
+            data: [['TOTAL', '52 BEATS'], ['LICENSE', 'BASIC / PREM'], ['BPM', '70–160'], ['PRICE', '$19 – $99']]
+        },
+        kits: {
+            label: 'OS 4.2 // KITS',
+            title: 'Sample Kits',
+            desc: 'Sample kits are coming soon.',
+            data: [['STATUS', 'COMING SOON'], ['FOLLOW', '@marsebeatz'], ['EMAIL', 'marsebeatz34@gmail.com'], ['SOCIAL', 'instagram.com/marsebeatz']]
+        },
+        contact: {
+            label: 'OS 4.2 // CONTACT',
+            title: 'Contact',
+            desc: 'Get in touch with marse beatz. Email or social media for beat orders, licenses or collabs.',
+            data: [['EMAIL', 'marsebeatz34@gmail.com']]
+        },
+        about: {
+            label: 'OS 4.2 // ABOUT',
+            title: 'About',
+            desc: 'I like making lo-fi and hip-hop music the most. I often use soul and jazz sounds in my beats, among other styles.',
+            data: [['EMAIL', 'marsebeatz34@gmail.com']]
+        },
+        lofi: {
+            label: 'OS 4.2 // LO-FI',
+            title: 'Lo-Fi Beat Demos',
+            desc: 'Lo-fi beat demos. Listen, get a license if you like them. Chill, vinyl-style beats.',
+            data: [['DEMOS', '12 TRACKS'], ['BPM', '85–95'], ['LISTEN', 'Preview'], ['LICENSE', 'Contact']]
+        },
+        trap: {
+            label: 'OS 4.2 // TRAP',
+            title: 'Trap Beat Demos',
+            desc: 'Trap beat demos. 808 and hi-hat focused. Listen, get in touch for a license.',
+            data: [['DEMOS', '15 TRACKS'], ['BPM', '140–170'], ['LISTEN', 'Preview'], ['LICENSE', 'Contact']]
+        },
+        drill: {
+            label: 'OS 4.2 // DRILL',
+            title: 'Drill Beat Demos',
+            desc: 'Drill beat demos. UK / Brooklyn style. Listen, get in touch to buy.',
+            data: [['DEMOS', '10 TRACKS'], ['BPM', '130–150'], ['LISTEN', 'Preview'], ['LICENSE', 'Contact']]
+        },
+        boombap: {
+            label: 'OS 4.2 // BOOM BAP',
+            title: 'Boom Bap Beat Demos',
+            desc: 'Boom bap beat demos. Classic hip-hop feel. Listen, reach out for a license.',
+            data: [['DEMOS', '8 TRACKS'], ['BPM', '85–95'], ['LISTEN', 'Preview'], ['LICENSE', 'Contact']]
+        },
+        spotify: {
+            label: 'OS 4.2 // SPOTIFY',
+            title: 'Spotify',
+            desc: 'Listen to marse beatz on Spotify. Beats and playlists.',
+            data: [['PLATFORM', 'Spotify'], ['LINK', 'open.spotify.com/artist/6HGk7uFbaDJxZYMSoiXOQJ'], ['STATUS', 'Open'], ['—', '—']]
+        },
+        applemusic: {
+            label: 'OS 4.2 // APPLE MUSIC',
+            title: 'Apple Music',
+            desc: 'marse beatz on Apple Music.',
+            data: [['PLATFORM', 'Apple Music'], ['LINK', 'music.apple.com/de/album/age-8/1504154594?i=1504154596'], ['STATUS', 'Open'], ['—', '—']]
+        },
+        youtube: {
+            label: 'OS 4.2 // YOUTUBE',
+            title: 'YouTube',
+            desc: 'YouTube channel and beat videos.',
+            data: [['PLATFORM', 'YouTube'], ['LINK', 'youtube.com/watch?v=uHyzW_VgFus'], ['STATUS', 'Open'], ['—', '—']]
+        },
+        soundcloud: {
+            label: 'OS 4.2 // INSTAGRAM',
+            title: 'Instagram',
+            desc: 'Follow marse beatz on Instagram for updates and snippets.',
+            data: [['PLATFORM', 'Instagram'], ['LINK', 'instagram.com/marsebeatz'], ['STATUS', 'Open'], ['—', '—']]
+        }
+    };
+
+    function setActivePad(pad) {
+        document.querySelectorAll('.pad').forEach(function (p) { p.classList.remove('active'); });
+        if (pad) pad.classList.add('active');
+    }
+
+    function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    function buildKitCard(kit, i, active) {
+        var card = document.createElement('div');
+        card.className = 'screen-card kit-item' + (active ? ' active' : '');
+        card.dataset.kitIndex = i;
+        var imgHtml = kit.image
+            ? '<img class="card-image" src="' + esc(kit.image) + '" alt="">'
+            : '<div class="card-image-placeholder">' + esc(kit.name.substring(0, 12)) + '</div>';
+        card.innerHTML = imgHtml +
+            '<div class="card-body">' +
+            '<div class="card-title">' + esc(kit.name) + '</div>' +
+            '<div class="card-price">' + esc(kit.price) + '</div>' +
+            '</div>';
+        return card;
+    }
+
+    function buildBeatCard(beat) {
+        var card = document.createElement('div');
+        card.className = 'screen-card beat-item';
+        var imgHtml = beat.image
+            ? '<img class="card-image" src="' + esc(beat.image) + '" alt="">'
+            : '<div class="card-image-placeholder">BEAT</div>';
+        card.innerHTML = imgHtml +
+            '<div class="card-body">' +
+            '<div class="card-title">' + esc(beat.name) + '</div>' +
+            '<div class="card-desc">' + esc(beat.shortDesc || 'Demo') + '</div>' +
+            '<div class="card-price">' + esc(beat.price || 'Listen') + '</div>' +
+            '</div>';
+        return card;
+    }
+
+    function totalKitPages() { return Math.max(1, Math.ceil(kits.length / PER_PAGE)); }
+    function totalBeatPages() { var d = beatDemos[currentBeatCategory] || []; return Math.max(1, Math.ceil(d.length / PER_PAGE)); }
+
+    function updatePagination(isKit) {
+        var total = isKit ? totalKitPages() : totalBeatPages();
+        var page = isKit ? currentKitPage : currentBeatPage;
+        screenPaginationEl.style.display = total > 1 ? 'flex' : 'none';
+        pageInfoEl.textContent = (page + 1) + '/' + total;
+        if (pagePrevBtn) pagePrevBtn.disabled = page <= 0;
+        if (pageNextBtn) pageNextBtn.disabled = page >= total - 1;
+    }
+
+    function renderKitPage() {
+        kitListEl.innerHTML = '';
+        var start = currentKitPage * PER_PAGE;
+        for (var i = 0; i < PER_PAGE; i++) {
+            var idx = start + i;
+            if (idx >= kits.length) break;
+            var kit = kits[idx];
+            var card = buildKitCard(kit, idx, false);
+            card.addEventListener('click', function () { selectKit(parseInt(this.dataset.kitIndex, 10)); });
+            kitListEl.appendChild(card);
+        }
+        if (kits.length > 0) selectKit(start);
+        updatePagination(true);
+    }
+
+    function renderBeatPage() {
+        beatListEl.innerHTML = '';
+        var demos = beatDemos[currentBeatCategory] || [];
+        var start = currentBeatPage * PER_PAGE;
+        for (var i = 0; i < PER_PAGE; i++) {
+            var idx = start + i;
+            if (idx >= demos.length) break;
+            var card = buildBeatCard(demos[idx]);
+            beatListEl.appendChild(card);
+        }
+        updatePagination(false);
+    }
+
+    function showKitsView() {
+        document.body.classList.remove('view-genre-loop');
+        document.body.classList.add('view-kits');
+        stopGenreLoop();
+        var infoPanel = document.querySelector('.info-panel');
+        if (infoPanel) infoPanel.classList.remove('view-contact');
+        if (contactSocialEl) contactSocialEl.style.display = 'none';
+        document.body.classList.remove('view-home');
+        if (welcomeMessageEl) welcomeMessageEl.classList.remove('visible');
+        if (waveformEl) waveformEl.style.display = 'none';
+        beatListEl.style.display = 'none';
+        kitListEl.style.display = 'grid';
+        if (kitActionsEl) kitActionsEl.style.display = 'block';
+        screenPaginationEl.style.display = 'flex';
+        screenLabel.textContent = 'OS 4.2 // KITS';
+        currentKitPage = 0;
+        renderKitPage();
+    }
+
+    function selectKit(index) {
+        var kit = kits[index];
+        if (!kit) return;
+        kitListEl.querySelectorAll('.kit-item').forEach(function (b) { b.classList.remove('active'); });
+        var activeCard = kitListEl.querySelector('.kit-item[data-kit-index="' + index + '"]');
+        if (activeCard) activeCard.classList.add('active');
+        if (trackSubtitleEl) { trackSubtitleEl.style.display = 'none'; trackSubtitleEl.textContent = ''; }
+        trackTitle.textContent = kit.name;
+        trackDesc.textContent = kit.desc;
+        dataLabels[0].textContent = 'TOTAL SIZE';
+        dataValues[0].textContent = kit.size;
+        dataLabels[1].textContent = 'FORMAT';
+        dataValues[1].textContent = kit.format;
+        dataLabels[2].textContent = 'SAMPLES';
+        dataValues[2].textContent = kit.samples;
+        dataLabels[3].textContent = 'PRICE';
+        dataValues[3].textContent = kit.price;
+        if (downloadBtnEl) downloadBtnEl.href = kit.downloadUrl || '#';
+    }
+
+    function showBeatsView(action) {
+        document.body.classList.remove('view-home');
+        if (welcomeMessageEl) welcomeMessageEl.classList.remove('visible');
+        if (waveformEl) waveformEl.style.display = 'none';
+        kitListEl.style.display = 'none';
+        beatListEl.style.display = 'grid';
+        if (kitActionsEl) kitActionsEl.style.display = 'none';
+        screenPaginationEl.style.display = 'flex';
+        currentBeatCategory = action;
+        currentBeatPage = 0;
+        renderBeatPage();
+    }
+
+    function goKitPage(delta) {
+        var total = totalKitPages();
+        currentKitPage = Math.max(0, Math.min(total - 1, currentKitPage + delta));
+        renderKitPage();
+    }
+    function goBeatPage(delta) {
+        var total = totalBeatPages();
+        currentBeatPage = Math.max(0, Math.min(total - 1, currentBeatPage + delta));
+        renderBeatPage();
+    }
+
+    function setupSwipe() {
+        var startX = 0;
+        function onStart(e) {
+            var x = e.touches ? e.touches[0].clientX : e.clientX;
+            startX = x;
+        }
+        function onEnd(e) {
+            var x = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+            var dx = x - startX;
+            if (Math.abs(dx) < 40) return;
+            if (kitListEl.style.display === 'grid') {
+                if (dx < 0) goKitPage(1); else goKitPage(-1);
+            } else if (beatListEl.style.display === 'grid') {
+                if (dx < 0) goBeatPage(1); else goBeatPage(-1);
+            }
+        }
+        if (screenMainEl) {
+            screenMainEl.addEventListener('touchstart', onStart, { passive: true });
+            screenMainEl.addEventListener('touchend', onEnd, { passive: true });
+            screenMainEl.addEventListener('mousedown', function (e) { startX = e.clientX; });
+            screenMainEl.addEventListener('mouseup', function (e) {
+                var dx = e.clientX - startX;
+                if (Math.abs(dx) < 40) return;
+                if (kitListEl.style.display === 'grid') {
+                    if (dx < 0) goKitPage(1); else goKitPage(-1);
+                } else if (beatListEl.style.display === 'grid') {
+                    if (dx < 0) goBeatPage(1); else goBeatPage(-1);
+                }
+            });
+        }
+    }
+    setupSwipe();
+
+    if (pagePrevBtn) pagePrevBtn.addEventListener('click', function () {
+        if (kitListEl.style.display === 'grid') goKitPage(-1); else goBeatPage(-1);
+    });
+    if (pageNextBtn) pageNextBtn.addEventListener('click', function () {
+        if (kitListEl.style.display === 'grid') goKitPage(1); else goBeatPage(1);
+    });
+
+    function hideScreenLists() {
+        document.body.classList.remove('view-kits', 'view-genre-loop');
+        kitListEl.style.display = 'none';
+        beatListEl.style.display = 'none';
+        screenPaginationEl.style.display = 'none';
+        if (kitActionsEl) kitActionsEl.style.display = 'none';
+        stopGenreLoop();
+        if (waveformEl) waveformEl.style.display = 'flex';
+    }
+
+    function showGenreLoopView(action) {
+        document.body.classList.add('view-genre-loop');
+        document.body.classList.remove('view-kits', 'view-home');
+        if (welcomeMessageEl) welcomeMessageEl.classList.remove('visible');
+        var g = genreLoops[action];
+        if (!g) return;
+        var infoPanel = document.querySelector('.info-panel');
+        if (infoPanel) infoPanel.classList.remove('view-contact');
+        if (contactSocialEl) contactSocialEl.style.display = 'none';
+        if (waveformEl) waveformEl.style.display = 'flex';
+        kitListEl.style.display = 'none';
+        beatListEl.style.display = 'none';
+        screenPaginationEl.style.display = 'none';
+        if (kitActionsEl) kitActionsEl.style.display = 'none';
+        screenLabel.textContent = g.label;
+        trackTitle.textContent = g.title;
+        trackSubtitleEl.textContent = genreLoopHeaders[action] || '';
+        trackSubtitleEl.style.display = 'block';
+        trackDesc.textContent = genreLoopFooter;
+        dataLabels[0].textContent = 'COLLAB';
+        dataValues[0].textContent = genreLoopContact;
+        dataLabels[1].textContent = '—';
+        dataValues[1].textContent = '—';
+        dataLabels[2].textContent = '—';
+        dataValues[2].textContent = '—';
+        dataLabels[3].textContent = '—';
+        dataValues[3].textContent = '—';
+        if (currentLoopGenre === action && loopAudio && !loopAudio.paused) {
+            stopGenreLoop();
+        } else {
+            if (loopAudio) { loopAudio.pause(); loopAudio.currentTime = 0; loopAudio.removeAttribute('src'); }
+            currentLoopGenre = action;
+            if (g.url) {
+                var audio = getLoopAudio();
+                audio.volume = (genreLoopVolumes[action] !== undefined ? genreLoopVolumes[action] : 0.8);
+                audio.src = g.url;
+                audio.play().catch(function () {});
+            }
+        }
+    }
+
+    function showView(action) {
+        if (action === 'lofi' || action === 'trap' || action === 'drill' || action === 'boombap') {
+            showGenreLoopView(action);
+            return;
+        }
+        hideScreenLists();
+        document.body.classList.toggle('view-home', action === 'home');
+        if (welcomeMessageEl) welcomeMessageEl.classList.toggle('visible', action === 'home');
+        if (waveformEl) waveformEl.style.display = (action === 'home' || action === 'contact') ? 'none' : 'flex';
+        if (trackSubtitleEl) { trackSubtitleEl.style.display = 'none'; trackSubtitleEl.textContent = ''; }
+        if (contactSocialEl) contactSocialEl.style.display = action === 'contact' ? 'flex' : 'none';
+        var infoPanel = document.querySelector('.info-panel');
+        if (infoPanel) infoPanel.classList.toggle('view-contact', action === 'contact');
+        var c = content[action];
+        if (!c) return;
+        screenLabel.textContent = c.label;
+        trackTitle.textContent = c.title;
+        trackDesc.textContent = c.desc;
+        for (var i = 0; i < 4; i++) {
+            var row = dataLabels[i].parentElement;
+            if (c.data[i]) {
+                dataLabels[i].textContent = c.data[i][0];
+                dataValues[i].textContent = c.data[i][1];
+                if (row) row.style.display = '';
+            } else {
+                dataLabels[i].textContent = '';
+                dataValues[i].textContent = '';
+                if (row) row.style.display = 'none';
+            }
+        }
+    }
+
+    function goHome() {
+        var homePad = document.querySelector('.pad[data-action="home"]');
+        setActivePad(homePad);
+        showView('home');
+    }
+
+    var drumPads = ['kick', 'hat', 'snare', 'openhat'];
+    var drumSampleUrls = {
+        kick: 'Basic 808 Kick.wav',
+        hat: 'Basic 808 HiHat.wav',
+        snare: 'Snare (8).wav',
+        openhat: 'Cardiak Open Hat.wav'
+    };
+    var drumBuffers = { kick: null, hat: null, snare: null, openhat: null };
+    var drumCtx = null;
+    function getDrumCtx() {
+        if (!drumCtx) drumCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (drumCtx.state === 'suspended') drumCtx.resume();
+        return drumCtx;
+    }
+    function loadOneDrum(key, cb) {
+        if (drumBuffers[key]) { if (cb) cb(); return; }
+        var url = drumSampleUrls[key];
+        if (!url) { if (cb) cb(); return; }
+        var ctx = getDrumCtx();
+        var req = new XMLHttpRequest();
+        req.open('GET', url, true);
+        req.responseType = 'arraybuffer';
+        req.onload = function () {
+            if (req.status === 200) {
+                ctx.decodeAudioData(req.response, function (buf) {
+                    drumBuffers[key] = buf;
+                    if (cb) cb();
+                }, function () { if (cb) cb(); });
+            } else { if (cb) cb(); }
+        };
+        req.onerror = function () { if (cb) cb(); };
+        req.send();
+    }
+    function loadAllDrumsInBackground() {
+        ['kick', 'hat', 'snare', 'openhat'].forEach(function (key) {
+            if (!drumBuffers[key]) loadOneDrum(key);
+        });
+    }
+    function playDrumSample(action) {
+        var buf = drumBuffers[action];
+        if (buf && drumCtx) {
+            var src = drumCtx.createBufferSource();
+            src.buffer = buf;
+            src.connect(drumCtx.destination);
+            src.start(0);
+            return;
+        }
+        playSynthDrum(action);
+    }
+    function playSynthDrum(action) {
+        if (!drumCtx) return;
+        var now = drumCtx.currentTime;
+        var osc = drumCtx.createOscillator();
+        var gain = drumCtx.createGain();
+        var filter = drumCtx.createBiquadFilter();
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(drumCtx.destination);
+        gain.gain.setValueAtTime(0.4, now);
+        if (action === 'kick') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(150, now);
+            osc.frequency.exponentialRampToValueAtTime(40, now + 0.15);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+            osc.start(now);
+            osc.stop(now + 0.2);
+        } else if (action === 'snare') {
+            var noise = drumCtx.createBufferSource();
+            var noiseBuf = drumCtx.createBuffer(1, drumCtx.sampleRate * 0.15, drumCtx.sampleRate);
+            var data = noiseBuf.getChannelData(0);
+            for (var i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+            noise.buffer = noiseBuf;
+            noise.connect(filter);
+            filter.type = 'highpass';
+            filter.frequency.value = 1000;
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(200, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+            osc.start(now);
+            osc.stop(now + 0.15);
+            noise.start(now);
+            noise.stop(now + 0.15);
+        } else if (action === 'hat' || action === 'openhat') {
+            var noise = drumCtx.createBufferSource();
+            var len = action === 'openhat' ? 0.25 : 0.08;
+            var noiseBuf = drumCtx.createBuffer(1, drumCtx.sampleRate * len, drumCtx.sampleRate);
+            var data = noiseBuf.getChannelData(0);
+            for (var i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
+            noise.buffer = noiseBuf;
+            noise.connect(filter);
+            filter.type = 'highpass';
+            filter.frequency.value = 7000;
+            filter.Q.value = 0.5;
+            gain.gain.exponentialRampToValueAtTime(0.01, now + len);
+            noise.start(now);
+            noise.stop(now + len);
+        }
+    }
+    function initDrumsOnFirstTouch() {
+        var ctx = getDrumCtx();
+        if (ctx.state === 'suspended') ctx.resume();
+        loadAllDrumsInBackground();
+    }
+    document.addEventListener('click', initDrumsOnFirstTouch, { once: true });
+    document.addEventListener('touchstart', initDrumsOnFirstTouch, { once: true });
+
+    var drumLabels = { kick: 'KICK', hat: 'HAT', snare: 'SNARE', openhat: 'OPEN HAT' };
+    function showDrumScreen(action) {
+        if (waveformEl) waveformEl.style.display = 'flex';
+        kitListEl.style.display = 'none';
+        beatListEl.style.display = 'none';
+        screenPaginationEl.style.display = 'none';
+        screenLabel.textContent = 'OS 4.2 // ' + (drumLabels[action] || action.toUpperCase());
+    }
+    function triggerDrum(action) {
+        var ctx = getDrumCtx();
+        function doPlay() {
+            if (drumBuffers[action]) {
+                playDrumSample(action);
+            } else {
+                playSynthDrum(action);
+                loadOneDrum(action);
+            }
+        }
+        if (ctx.state === 'suspended') {
+            ctx.resume().then(doPlay).catch(doPlay);
+        } else {
+            doPlay();
+        }
+        showDrumScreen(action);
+    }
+
+    var socialActions = ['spotify', 'applemusic', 'youtube', 'soundcloud'];
+    document.querySelectorAll('.pad').forEach(function (pad) {
+        var action = pad.getAttribute('data-action');
+        var isDrum = drumPads.indexOf(action) !== -1;
+        var isSocial = socialActions.indexOf(action) !== -1;
+
+        function handleTrigger(e) {
+            if (isDrum) {
+                e.preventDefault();
+                pad.classList.add('hit');
+                triggerDrum(action);
+                setTimeout(function () { pad.classList.remove('hit'); }, 80);
+            } else if (isSocial && socialUrls[action]) {
+                window.open(socialUrls[action], '_blank');
+                setActivePad(pad);
+                showView(action);
+            } else {
+                setActivePad(pad);
+                showView(action);
+            }
+        }
+
+        pad.addEventListener('click', function (e) {
+            if (isDrum) handleTrigger(e);
+            else if (isSocial && socialUrls[action]) {
+                window.open(socialUrls[action], '_blank');
+                setActivePad(pad);
+                showView(action);
+            } else {
+                setActivePad(pad);
+                showView(action);
+            }
+        });
+        pad.addEventListener('touchstart', function (e) {
+            if (isDrum) {
+                e.preventDefault();
+                e.stopPropagation();
+                handleTrigger(e);
+            } else if (isSocial && socialUrls[action]) {
+                e.preventDefault();
+                window.open(socialUrls[action], '_blank');
+                setActivePad(pad);
+                showView(action);
+            }
+        }, { passive: false });
+    });
+
+    document.getElementById('reset-view-btn').addEventListener('click', goHome);
+    goHome();
+})();
+    </script>
+
+</body></html>
