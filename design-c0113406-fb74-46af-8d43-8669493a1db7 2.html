@@ -1914,6 +1914,13 @@
     }
 
     var socialActions = ['spotify', 'applemusic', 'youtube', 'soundcloud'];
+    function openSocialUrl(url) {
+        // Mobil tarayıcılarda (özellikle iOS) window.open bazen engellenebiliyor.
+        // Engellenirse aynı sekmede açarak garantiye alıyoruz.
+        var w = null;
+        try { w = window.open(url, '_blank'); } catch (e) {}
+        if (!w) window.location.href = url;
+    }
     document.querySelectorAll('.pad').forEach(function (pad) {
         var action = pad.getAttribute('data-action');
         var isDrum = drumPads.indexOf(action) !== -1;
@@ -1926,7 +1933,7 @@
                 triggerDrum(action);
                 setTimeout(function () { pad.classList.remove('hit'); }, 80);
             } else if (isSocial && socialUrls[action]) {
-                window.open(socialUrls[action], '_blank');
+                openSocialUrl(socialUrls[action]);
                 setActivePad(pad);
                 showView(action);
             } else {
@@ -1938,7 +1945,7 @@
         pad.addEventListener('click', function (e) {
             if (isDrum) handleTrigger(e);
             else if (isSocial && socialUrls[action]) {
-                window.open(socialUrls[action], '_blank');
+                openSocialUrl(socialUrls[action]);
                 setActivePad(pad);
                 showView(action);
             } else {
@@ -1953,7 +1960,7 @@
                 handleTrigger(e);
             } else if (isSocial && socialUrls[action]) {
                 e.preventDefault();
-                window.open(socialUrls[action], '_blank');
+                openSocialUrl(socialUrls[action]);
                 setActivePad(pad);
                 showView(action);
             }
