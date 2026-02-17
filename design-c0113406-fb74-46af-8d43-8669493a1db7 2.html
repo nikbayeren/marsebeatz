@@ -983,6 +983,10 @@
             user-select: none;
             min-height: 0;
         }
+        a.pad {
+            text-decoration: none;
+            color: inherit;
+        }
 
         .pad:hover {
             background-color: var(--bg-card-hover);
@@ -1238,22 +1242,22 @@
                 </div>
 
                 
-                <div class="pad" data-action="spotify" vid="69">
+                <a class="pad" data-action="spotify" href="https://open.spotify.com/intl-tr/artist/6HGk7uFbaDJxZYMSoiXOQJ?si=4lk8klDnQTKyz3YofXlmzg" target="_blank" rel="noopener noreferrer" vid="69">
                     <span class="pad-number" vid="70">05</span>
                     <span class="pad-label" vid="71">Spotify</span>
-                </div>
-                <div class="pad" data-action="applemusic" vid="72">
+                </a>
+                <a class="pad" data-action="applemusic" href="https://music.apple.com/de/album/age-8/1504154594?i=1504154596" target="_blank" rel="noopener noreferrer" vid="72">
                     <span class="pad-number" vid="73">06</span>
                     <span class="pad-label" vid="74">Apple Music</span>
-                </div>
-                <div class="pad" data-action="youtube" vid="75">
+                </a>
+                <a class="pad" data-action="youtube" href="https://www.youtube.com/watch?v=uHyzW_VgFus" target="_blank" rel="noopener noreferrer" vid="75">
                     <span class="pad-number" vid="76">07</span>
                     <span class="pad-label" vid="77">YouTube</span>
-                </div>
-                <div class="pad" data-action="soundcloud" vid="78">
+                </a>
+                <a class="pad" data-action="soundcloud" href="https://www.instagram.com/marsebeatz/" target="_blank" rel="noopener noreferrer" vid="78">
                     <span class="pad-number" vid="79">08</span>
                     <span class="pad-label" vid="80">Instagram</span>
-                </div>
+                </a>
 
                 
                 <div class="pad" data-action="lofi" vid="81">
@@ -1914,17 +1918,11 @@
     }
 
     var socialActions = ['spotify', 'applemusic', 'youtube', 'soundcloud'];
-    function openSocialUrl(url) {
-        // Mobil tarayıcılarda (özellikle iOS) window.open bazen engellenebiliyor.
-        // Engellenirse aynı sekmede açarak garantiye alıyoruz.
-        var w = null;
-        try { w = window.open(url, '_blank'); } catch (e) {}
-        if (!w) window.location.href = url;
-    }
     document.querySelectorAll('.pad').forEach(function (pad) {
         var action = pad.getAttribute('data-action');
         var isDrum = drumPads.indexOf(action) !== -1;
         var isSocial = socialActions.indexOf(action) !== -1;
+        /* Sosyal pad'ler gerçek <a> olduğu için tek dokunuşta link açılır; ekstra handler eklemiyoruz. */
 
         function handleTrigger(e) {
             if (isDrum) {
@@ -1932,11 +1930,7 @@
                 pad.classList.add('hit');
                 triggerDrum(action);
                 setTimeout(function () { pad.classList.remove('hit'); }, 80);
-            } else if (isSocial && socialUrls[action]) {
-                openSocialUrl(socialUrls[action]);
-                setActivePad(pad);
-                showView(action);
-            } else {
+            } else if (!isSocial) {
                 setActivePad(pad);
                 showView(action);
             }
@@ -1944,11 +1938,8 @@
 
         pad.addEventListener('click', function (e) {
             if (isDrum) handleTrigger(e);
-            else if (isSocial && socialUrls[action]) {
-                openSocialUrl(socialUrls[action]);
-                setActivePad(pad);
-                showView(action);
-            } else {
+            else if (!isSocial) {
+                e.preventDefault();
                 setActivePad(pad);
                 showView(action);
             }
@@ -1958,13 +1949,9 @@
                 e.preventDefault();
                 e.stopPropagation();
                 handleTrigger(e);
-            } else if (isSocial && socialUrls[action]) {
-                e.preventDefault();
-                openSocialUrl(socialUrls[action]);
-                setActivePad(pad);
-                showView(action);
             }
-        }, { passive: false });
+            /* isSocial ise dokunma olayına müdahale etmiyoruz; <a> kendi linkini açar */
+        }, { passive: isSocial });
     });
 
     document.getElementById('reset-view-btn').addEventListener('click', goHome);
